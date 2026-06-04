@@ -1,0 +1,72 @@
+info:
+  name: Matches
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/ctf/matches"
+  body:
+    type: json
+    data: |-
+      {
+        "challenge_key": "web-101",
+        "mode": "vs"
+      }
+  auth:
+    type: bearer
+    token: 8|AxcdjT3ywt1QDgvhLJcIUIyeVp09ZBe5iErfa8Tkfbf785c7
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/api/ctf/matches"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "challenge_key": "web-101",
+            "mode": "vs"
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: host
+          value: 127.0.0.1:8000
+        - name: connection
+          value: close
+        - name: x-powered-by
+          value: PHP/8.2.30
+        - name: cache-control
+          value: no-cache, private
+        - name: date
+          value: Thu, 04 Jun 2026 03:36:00 GMT
+        - name: content-type
+          value: application/json
+        - name: access-control-allow-origin
+          value: "*"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "message": "Match berhasil dibuat.",
+            "data": {
+              "id": "019e90b3-c14d-7176-a61a-7f6029553eb8",
+              "challenge_key": "web-101",
+              "mode": "vs",
+              "status": "waiting",
+              "winner_user_id": null,
+              "started_at": null,
+              "ended_at": null
+            },
+            "meta": {}
+          }

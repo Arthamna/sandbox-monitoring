@@ -1,0 +1,28 @@
+services:
+  ctf-sandbox-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ctf-sandbox-be:latest
+    container_name: "ctf-sandbox"
+    
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      DB_CONNECTION: ${DB_CONNECTION:-mysql}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "artisan", "octane:status"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+

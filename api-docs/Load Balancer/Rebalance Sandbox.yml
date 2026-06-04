@@ -1,0 +1,78 @@
+info:
+  name: Rebalance Sandbox
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/load-balancer/rebalance"
+  body:
+    type: json
+    data: |-
+      {
+        "dry_run" : true
+      }
+  auth:
+    type: bearer
+    token: 9|qnLtgLkkIn81aacoea3PxYuQxJsex966fPaPnxGy07eb8640
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/api/load-balancer/rebalance"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "dry_run" : true
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: host
+          value: 127.0.0.1:8000
+        - name: connection
+          value: close
+        - name: x-powered-by
+          value: PHP/8.2.30
+        - name: cache-control
+          value: no-cache, private
+        - name: date
+          value: Thu, 04 Jun 2026 04:09:08 GMT
+        - name: content-type
+          value: application/json
+        - name: access-control-allow-origin
+          value: "*"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "message": "Rebalance selesai.",
+            "data": {
+              "moved": 2,
+              "checked": 2,
+              "dryRun": true,
+              "changes": [
+                {
+                  "sandbox_id": "019e9088-07b0-72ed-b88e-9395ca897cda",
+                  "from": "019e8c6a-3f2e-73e0-8ea7-e98af9708e41",
+                  "to": "019e8c6a-3f4b-73e6-be3b-37226f2f8dd6"
+                },
+                {
+                  "sandbox_id": "019e8c6a-5d44-7140-bcca-a84a4449d3c1",
+                  "from": null,
+                  "to": "019e8c6a-3f4b-73e6-be3b-37226f2f8dd6"
+                }
+              ]
+            },
+            "meta": {}
+          }

@@ -1,0 +1,80 @@
+info:
+  name: Register
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/auth/register"
+  headers:
+    - name: Content-Type
+      value: application/json
+      disabled: true
+    - name: Accept
+      value: application/json
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "username": "not-admin",
+        "role"   : "player",
+        "password": "password234"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/api/auth/register"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+          disabled: true
+        - name: Accept
+          value: application/json
+          disabled: true
+      body:
+        type: json
+        data: |-
+          {
+            "username": "not-admin",
+            "role"   : "player",
+            "password": "password234"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: host
+          value: 127.0.0.1:8000
+        - name: connection
+          value: close
+        - name: x-powered-by
+          value: PHP/8.2.30
+        - name: cache-control
+          value: no-cache, private
+        - name: date
+          value: Wed, 03 Jun 2026 14:27:03 GMT
+        - name: content-type
+          value: application/json
+        - name: access-control-allow-origin
+          value: "*"
+      body:
+        type: json
+        data: |-
+          {
+            "user": {
+              "username": "not-admin",
+              "role": "player",
+              "id": "019e8de1-72c2-7315-a34e-d65ccb47e02b"
+            },
+            "token": "3|ezatAFWlQKCrJpsryMRVfFACgFMg8DjJhyJfSAvJ28ee9dcd"
+          }

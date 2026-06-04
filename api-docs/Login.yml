@@ -1,0 +1,65 @@
+info:
+  name: Login
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "admin",
+        "password": "password"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/api/auth/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "username": "admin",
+            "password": "password"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: host
+          value: 127.0.0.1:8000
+        - name: connection
+          value: close
+        - name: x-powered-by
+          value: PHP/8.2.30
+        - name: cache-control
+          value: no-cache, private
+        - name: date
+          value: Wed, 03 Jun 2026 14:05:19 GMT
+        - name: content-type
+          value: application/json
+        - name: access-control-allow-origin
+          value: "*"
+      body:
+        type: json
+        data: |-
+          {
+            "user": {
+              "id": "019e8c5c-9abb-71f5-915f-fe12aaf27e52",
+              "username": "admin",
+              "role": "admin",
+              "created_at": "2026-06-03 07:22:20"
+            },
+            "token": "2|rMYgOvQvmcjQoioJMsqWhBkseIpIpQDIAL3bXVEZ6a7afba1"
+          }

@@ -1,0 +1,92 @@
+info:
+  name: Submit Flag
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/api/ctf/matches/019e90b3-c14d-7176-a61a-7f6029553eb8/submit"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": "019e8c5c-9ae2-710b-a057-cf444fb1ecae",
+        "score_delta": 100
+      }
+  auth:
+    type: bearer
+    token: 9|qnLtgLkkIn81aacoea3PxYuQxJsex966fPaPnxGy07eb8640
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/api/ctf/matches/019e90b3-c14d-7176-a61a-7f6029553eb8/submit"
+      method: POST
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "user_id": "019e8c5c-9ae2-710b-a057-cf444fb1ecae",
+            "score_delta": 100
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: host
+          value: 127.0.0.1:8000
+        - name: connection
+          value: close
+        - name: x-powered-by
+          value: PHP/8.2.30
+        - name: cache-control
+          value: no-cache, private
+        - name: date
+          value: Thu, 04 Jun 2026 04:20:37 GMT
+        - name: content-type
+          value: application/json
+        - name: access-control-allow-origin
+          value: "*"
+      body:
+        type: json
+        data: |-
+          {
+            "success": true,
+            "message": "Submission berhasil diproses.",
+            "data": {
+              "id": "019e90b3-c14d-7176-a61a-7f6029553eb8",
+              "challenge_key": "web-101",
+              "mode": "vs",
+              "status": "running",
+              "winner_user_id": null,
+              "started_at": "2026-06-04 03:41:21",
+              "ended_at": null,
+              "winner": null,
+              "players": [
+                {
+                  "user": {
+                    "id": "019e8c5c-9ae2-710b-a057-cf444fb1ecae",
+                    "username": "player_charlie",
+                    "role": "player",
+                    "created_at": "2026-06-03 07:22:20"
+                  },
+                  "side": "A",
+                  "score": 100,
+                  "joined_at": "2026-06-04T03:41:21.000000Z"
+                }
+              ]
+            },
+            "meta": {}
+          }
