@@ -21,6 +21,7 @@ class Sandbox extends Model
         'vmid', 
         'ip_address', 
         'config', 
+        'proxmox_upid',
         'started_at', 
         'stopped_at',
     ];

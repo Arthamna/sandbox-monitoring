@@ -15,6 +15,7 @@ class ProxmoxNode extends Model
 
     protected $fillable = [
         'username',
+        'node_name',
         'api_url',
         'status', // in ['online', 'offline'],
         'weight',

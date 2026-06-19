@@ -17,6 +17,7 @@ class ProxmoxNodeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'node_name' => $this->node_name,
             'api_url' => $this->api_url,
             'status' => $this->status,
             'weight' => $this->weight,

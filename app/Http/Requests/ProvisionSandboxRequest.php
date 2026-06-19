@@ -25,10 +25,13 @@ class ProvisionSandboxRequest extends FormRequest
         return [
             'owner_user_id' => ['required', 'uuid', 'exists:users,id'],
             'kind'          => ['required', 'in:training,ctf'],
+            'type'          => ['sometimes', 'in:qemu,lxc'],
             'config'        => ['sometimes', 'array'],
             'config.image'  => ['sometimes', 'string'],
             'config.ram'    => ['sometimes', 'integer'],
             'config.cpu'    => ['sometimes', 'integer'],
+            'config.storage'=> ['sometimes', 'string'],
+            'config.disk'   => ['sometimes', 'integer'],
         ];
     }
 }

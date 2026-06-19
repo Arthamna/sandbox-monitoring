@@ -23,9 +23,12 @@ class SandboxResource extends JsonResource
             'vmid' => $this->vmid,
             'ip_address' => $this->ip_address,
             'config' => $this->config,
+            'proxmox_upid' => $this->proxmox_upid,
             'created_at' => $this->created_at,
             'started_at' => $this->started_at,
             'stopped_at' => $this->stopped_at,
+
+            'proxmox_config' => $this->when(isset($this->resource->proxmox_config), $this->resource->proxmox_config ?? null),
 
             'owner' => UserResource::make($this->whenLoaded('owner')),
             'node' => ProxmoxNodeResource::make($this->whenLoaded('node')),

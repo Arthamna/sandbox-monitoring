@@ -22,9 +22,6 @@ class ActivateSandboxRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'vmid'       => ['required', 'integer'],
-            'ip_address' => ['required', 'string'],
-        ];
+        return [];
     }
 }

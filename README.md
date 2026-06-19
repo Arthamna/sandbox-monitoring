@@ -69,6 +69,10 @@ npm install
 # Copy environment file
 cp .env.example .env
 php artisan key:generate
+
+docker exec -it --user sail ctf-sandbox /bin/bash
+
+
 ```
 
 ### Database
@@ -109,7 +113,42 @@ docker compose up -d
 # Or use the Makefile
 make build
 make up
+
+# to login as sail user in docker
+make ex-php 
 ```
+
+---
+
+User Setup :
+
+- setup user (u can setup more ofc if u need only spesific user get some spesific access)
+datacenter -> permissions -> user
+- setup group policy for user (default, keep same with admin)
+- assign permission on permissions
+
+Prerequisities :
+- pve post install
+- iso image (for create vm or ct)
+
+
+generate token :
+
+cek docs example :
+https://pve.proxmox.com/pve-docs/api-viewer/
+
+example hit request :
+https://192.168.83.129:8006/api2/json/access/ticket
+
+
+
+take :
+csrf : as header (csrf) 
+ticket : as values in cookies 
+
+
+Also make sure u have the image templa
+
 
 ---
 
@@ -119,7 +158,7 @@ make up
 
 | Endpoint Name | Method | Description |
 |---|---|---|
-| Sandbox Provision | `POST /api/sandboxes` | The backend selects the best node and provisions a new sandbox. |
+| Sandbox Provision | `POST /api/sandboxes` | The backend selects the best node and provisions a new sandbox. (U need to have the template image to start creating one)|
 | Activate Sandbox | `POST /api/sandboxes/{id}/active` | Starts the specified sandbox. |
 | Sandbox Detail | `GET /api/sandboxes/{id}` | Retrieve sandbox details. |
 | Sandbox Events | `POST /api/sandboxes/{id}/events` | Agent sends activity events (`process_start`, `file_access`, `network_connection`, `alert`). |

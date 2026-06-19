@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ActivateSandboxRequest;
 use App\Http\Requests\ProvisionSandboxRequest;
-use App\Http\Requests\StoreSandboxRequest;
 use App\Http\Resources\SandboxResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Sandbox;
+use App\Services\ProxmoxApiService;
 use App\Services\SandboxActivateService;
 use App\Services\SandboxProvisionService;
-use Illuminate\Http\Request;
 
 class SandboxController extends Controller
 {
@@ -22,16 +20,27 @@ class SandboxController extends Controller
         return ApiResponse::success('Sandbox berhasil diprovision.', SandboxResource::make($sandbox->load(['owner', 'node'])), 201);
     }
 
-    public function activate(ActivateSandboxRequest $request, Sandbox $sandbox, SandboxActivateService $service)
+    public function activate(Sandbox $sandbox, string $type, SandboxActivateService $service)
     {
-        $sandbox = $service->activate($sandbox, $request->validated());
+        $sandbox = $service->activate($sandbox, $type);
 
         return ApiResponse::success('Sandbox berhasil diaktifkan.', SandboxResource::make($sandbox->load(['owner', 'node'])));
     }
 
-    public function show(Sandbox $sandbox)
+    public function show(Sandbox $sandbox, ProxmoxApiService $proxmoxApiService)
     {
-        return ApiResponse::success('Sandbox berhasil diambil.', SandboxResource::make($sandbox->load(['owner', 'node'])));
+        $sandbox->load(['owner', 'node']);
+
+        if ($sandbox->vmid && $sandbox->node) {
+            $config = $proxmoxApiService->getVmConfig(
+                $sandbox->node->node_name,
+                $sandbox->vmid,
+                'lxc'
+            );
+            $sandbox->setAttribute('proxmox_config', $config);
+        }
+
+        return ApiResponse::success('Sandbox berhasil diambil.', SandboxResource::make($sandbox));
     }
 
     public function stream(Sandbox $sandbox)

@@ -22,7 +22,8 @@ class ProxmoxNodeSeeder extends Seeder
                     'max_memory_gb' => 128,
                     'max_sandboxes' => 50,
                 ],
-            ],
+                'node_name' => 'contoh1',
+            ], 
             [
                 'username' => 'node-sgp-01',
                 'api_url' => 'https://pve-sgp-01.internal:8006/api2/json',
@@ -34,6 +35,7 @@ class ProxmoxNodeSeeder extends Seeder
                     'max_memory_gb' => 64,
                     'max_sandboxes' => 30,
                 ],
+                'node_name' => 'contoh2',
             ],
             [
                 'username' => 'node-usw-01',
@@ -46,6 +48,7 @@ class ProxmoxNodeSeeder extends Seeder
                     'max_memory_gb' => 32,
                     'max_sandboxes' => 20,
                 ],
+                'node_name' => 'contoh3',
             ],
         ];
 

@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'proxmox' => [
+        'base_url' => env('PROXMOX_BASE_URL', 'https://127.0.0.1:8006'),
+        'username' => env('PROXMOX_USERNAME', 'root@pam'),
+        'password' => env('PROXMOX_PASSWORD', ''),
+        'webhook_secret' => env('PROXMOX_WEBHOOK_SECRET', ''),
+    ],
+
 ];
