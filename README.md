@@ -119,36 +119,39 @@ make ex-php
 ```
 
 ---
+## Proxmox User Setup
 
-User Setup :
+Before creating sandboxes, make sure the Proxmox environment is ready.
 
-- setup user (u can setup more ofc if u need only spesific user get some spesific access)
-datacenter -> permissions -> user
-- setup group policy for user (default, keep same with admin)
-- assign permission on permissions
+## User and Permission Setup
+- Create the required user in Datacenter → Permissions → Users.
+- Assign the appropriate permissions at the cluster permission level.
+- Configure a permission group or policy for the user.
+- For admin-like access, keep the default policy or mirror the admin role as needed.
 
-Prerequisities :
-- pve post install
-- iso image (for create vm or ct)
+## Prerequisites
+- Proxmox VE post-installation is complete (find the script [here](https://community-scripts.org/?q=pve+post).
+- ISO images or CT templates are already uploaded for VM or container creation.
+## API Documentation
 
-
-generate token :
-
-cek docs example :
+Refer to the Proxmox API viewer for endpoint examples and request formats:
+```
 https://pve.proxmox.com/pve-docs/api-viewer/
+```
+## Generating a Token
 
-example hit request :
-https://192.168.83.129:8006/api2/json/access/ticket
+To generate a token, send a request to:
 
+```
+https://{{PROXMOX_DEFAULT_NETWORK}}/api2/json/access/ticket
+```
 
+Use the response like this:
 
-take :
-csrf : as header (csrf) 
-ticket : as values in cookies 
+- ticket → stored in cookies
+- CSRFPreventionToken → sent as a request header
 
-
-Also make sure u have the image templa
-
+Make sure the required image template is available in Proxmox, both for containers and for virtual machines.
 
 ---
 

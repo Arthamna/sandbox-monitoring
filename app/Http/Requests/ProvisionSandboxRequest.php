@@ -32,6 +32,7 @@ class ProvisionSandboxRequest extends FormRequest
             'config.cpu'    => ['sometimes', 'integer'],
             'config.storage'=> ['sometimes', 'string'],
             'config.disk'   => ['sometimes', 'integer'],
+            'config.features'=> ['sometimes', 'string'],
         ];
     }
 }

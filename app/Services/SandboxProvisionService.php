@@ -43,6 +43,7 @@ class SandboxProvisionService
                 $disk = $config['disk'] ?? 8; // default 8GB
                 $proxmoxParams['storage'] = $storage;
                 $proxmoxParams['rootfs'] = "{$storage}:{$disk}";
+                $proxmoxParams['features'] = $config['features'] ?? 'nesting=1'; // provide nesting as default ct doesn't enable it
             }
 
             if (isset($config['ram'])) {
