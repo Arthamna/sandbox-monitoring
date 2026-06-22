@@ -19,6 +19,7 @@ class SandboxResource extends JsonResource
             'owner_user_id' => $this->owner_user_id,
             'proxmox_node_id' => $this->proxmox_node_id,
             'kind' => $this->kind,
+            'type' => $this->type,
             'status' => $this->status,
             'vmid' => $this->vmid,
             'ip_address' => $this->ip_address,

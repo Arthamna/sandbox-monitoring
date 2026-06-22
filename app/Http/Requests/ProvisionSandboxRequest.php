@@ -24,7 +24,7 @@ class ProvisionSandboxRequest extends FormRequest
     {
         return [
             'owner_user_id' => ['required', 'uuid', 'exists:users,id'],
-            'kind'          => ['required', 'in:training,ctf'],
+            'kind'          => ['required', 'in:training,competition'],
             'type'          => ['sometimes', 'in:qemu,lxc'],
             'config'        => ['sometimes', 'array'],
             'config.image'  => ['sometimes', 'string'],
@@ -33,6 +33,7 @@ class ProvisionSandboxRequest extends FormRequest
             'config.storage'=> ['sometimes', 'string'],
             'config.disk'   => ['sometimes', 'integer'],
             'config.features'=> ['sometimes', 'string'],
+            'config.virtualization' => ['sometimes', 'boolean'],
         ];
     }
 }

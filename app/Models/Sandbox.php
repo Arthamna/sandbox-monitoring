@@ -17,6 +17,7 @@ class Sandbox extends Model
         'owner_user_id', 
         'proxmox_node_id', 
         'kind', 
+        'type',
         'status',
         'vmid', 
         'ip_address', 

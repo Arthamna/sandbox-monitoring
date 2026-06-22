@@ -20,15 +20,17 @@ class SandboxActivateService
      * @return Sandbox
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function activate(Sandbox $sandbox, string $type = 'lxc'): Sandbox
+    public function activate(Sandbox $sandbox, string $type = null): Sandbox
     {
         return DB::transaction(function () use ($sandbox, $type) {
             $sandbox->load('node');
 
+            $actualType = $type ?? $sandbox->type ?? 'lxc';
+
             $upid = $this->proxmoxApiService->startVm(
                 $sandbox->node->node_name,
                 $sandbox->vmid,
-                $type
+                $actualType
             );
 
             $sandbox->update([

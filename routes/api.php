@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CtfMatchController;
 use App\Http\Controllers\Api\LoadBalancerNodeController;
 use App\Http\Controllers\Api\LoadBalancerRebalanceController;
 use App\Http\Controllers\Api\SandboxController;
+use App\Http\Controllers\Api\CtfLogController;
 use App\Http\Controllers\Api\SandboxEventController;
 use App\Http\Controllers\Api\SandboxWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -13,13 +14,14 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 // Admin  
 Route::middleware(['auth:sanctum', 'admin'])->prefix('sandboxes')->group(function () {
     
+    // list
+    Route::get('/',                       [SandboxController::class, 'index']);
+
     // create
     Route::post('/',                      [SandboxController::class, 'store']);
     
     // activate
     Route::post('/{sandbox}/activate',    [SandboxController::class, 'activate']);
-    Route::post('/{sandbox}/activate/{type}', [SandboxController::class, 'activate'])
-    ->whereIn('type', ['qemu', 'lxc']);
     
     // show
     Route::get('/{sandbox}',              [SandboxController::class, 'show']);
@@ -50,6 +52,10 @@ Route::middleware('auth:sanctum')->prefix('ctf/matches')->group(function () {
 
 Route::prefix('webhooks')->group(function () {
     Route::post('/sandbox/task-complete', [SandboxWebhookController::class, 'taskComplete']);
+});
+
+Route::middleware(['auth:sanctum', 'admin'])->prefix('logs')->group(function () {
+    Route::get('/', [CtfLogController::class, 'index']);
 });
 
 Route::prefix('auth')->middleware('guest')->group(function () {

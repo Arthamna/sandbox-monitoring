@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
     {
         
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'role' => 'required|string|in:admin,player',
             'password' => 'required',
         ]);

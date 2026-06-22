@@ -15,7 +15,7 @@ http:
       {
         "owner_user_id": "019edf11-8973-706b-8fd6-b3e8598b7932",
         "kind": "training",
-        "type" : "qemu",
+        "type" : "lxc",
         "config": {
           "image": "ubuntu-22.04",
           "ram": 2048,
@@ -24,7 +24,7 @@ http:
       }
   auth:
     type: bearer
-    token: 6|94rWXoK3CSCrviEABVJlqEGyxJ1TgZmDDx8r5o7Pb9efca5c
+    token: 7|Fof5FiXbxJSFl1tVnGAtUYsqjtWIlrkhTf7IqHb3c3b70360
 
 settings:
   encodeUrl: true

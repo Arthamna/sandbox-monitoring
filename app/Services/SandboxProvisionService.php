@@ -36,6 +36,8 @@ class SandboxProvisionService
                 $nameKey => "sandbox-{$vmid}",
             ];
 
+            $virtualizationEnabled = isset($config['virtualization']) ? (bool) $config['virtualization'] : true;
+
             // LXC needs a storage that supports container rootfs (e.g. local-lvm)
             // 'local' only stores templates/ISOs/backups, not container directories
             if ($type === 'lxc') {
@@ -43,7 +45,15 @@ class SandboxProvisionService
                 $disk = $config['disk'] ?? 8; // default 8GB
                 $proxmoxParams['storage'] = $storage;
                 $proxmoxParams['rootfs'] = "{$storage}:{$disk}";
-                $proxmoxParams['features'] = $config['features'] ?? 'nesting=1'; // provide nesting as default ct doesn't enable it
+                
+                if (isset($config['features'])) {
+                    $proxmoxParams['features'] = $config['features'];
+                } elseif ($virtualizationEnabled) {
+                    $proxmoxParams['features'] = 'nesting=1'; // provide nesting as default ct doesn't enable it
+                }
+            } else {
+                // QEMU uses KVM
+                $proxmoxParams['kvm'] = $virtualizationEnabled ? 1 : 0;
             }
 
             if (isset($config['ram'])) {
@@ -82,6 +92,7 @@ class SandboxProvisionService
                 'owner_user_id'   => $data['owner_user_id'],
                 'proxmox_node_id' => $node->id,
                 'kind'            => $data['kind'],
+                'type'            => $type,
                 'status'          => 'queued',
                 'vmid'            => $vmid,
                 'proxmox_upid'    => $upid,

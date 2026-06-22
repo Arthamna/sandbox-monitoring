@@ -7,22 +7,49 @@ use App\Http\Requests\ProvisionSandboxRequest;
 use App\Http\Resources\SandboxResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Sandbox;
+use App\Services\CtfLogger;
 use App\Services\ProxmoxApiService;
 use App\Services\SandboxActivateService;
 use App\Services\SandboxProvisionService;
 
 class SandboxController extends Controller
 {
+    public function index()
+    {
+        $sandboxes = Sandbox::with(['owner', 'node'])->orderByDesc('started_at')->paginate(20);
+
+        return ApiResponse::success('Daftar sandbox berhasil diambil.', SandboxResource::collection($sandboxes));
+    }
+
     public function store(ProvisionSandboxRequest $request, SandboxProvisionService $service)
     {
         $sandbox = $service->provision($request->validated());
 
+        CtfLogger::info('admin:sandbox:provision', "Sandbox {$sandbox->id} berhasil diprovision oleh admin.", [
+            'sandbox_id' => $sandbox->id,
+            'admin_id' => $request->user()->id,
+            'admin_username' => $request->user()->username,
+            'owner_user_id' => $sandbox->owner_user_id,
+            'kind' => $sandbox->kind,
+            'vmid' => $sandbox->vmid,
+            'node' => $sandbox->node->node_name ?? null,
+        ]);
+
         return ApiResponse::success('Sandbox berhasil diprovision.', SandboxResource::make($sandbox->load(['owner', 'node'])), 201);
     }
 
-    public function activate(Sandbox $sandbox, string $type, SandboxActivateService $service)
+    public function activate(Sandbox $sandbox, SandboxActivateService $service)
     {
-        $sandbox = $service->activate($sandbox, $type);
+        $sandbox = $service->activate($sandbox);
+
+        CtfLogger::info('admin:sandbox:activate', "Sandbox {$sandbox->id} berhasil diaktifkan oleh admin.", [
+            'sandbox_id' => $sandbox->id,
+            'admin_id' => request()->user()->id,
+            'admin_username' => request()->user()->username,
+            'vmid' => $sandbox->vmid,
+            'type' => $sandbox->type,
+            'node' => $sandbox->node->node_name ?? null,
+        ]);
 
         return ApiResponse::success('Sandbox berhasil diaktifkan.', SandboxResource::make($sandbox->load(['owner', 'node'])));
     }

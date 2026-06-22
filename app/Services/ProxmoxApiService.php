@@ -206,12 +206,35 @@ class ProxmoxApiService
 
         $templates = $this->getAvailableTemplates($node, $storage, $contentType);
 
+        // Normalize: split input into keywords by spaces, dots, dashes, underscores
+        $keywords = preg_split('/[\s.\-_]+/', strtolower(trim($image)));
+        $keywords = array_filter($keywords); // remove empties
+
+        $bestMatch = null;
+        $bestScore = 0;
+
         foreach ($templates as $template) {
             $volid = $template['volid'] ?? '';
-            // Match if the volid contains the short image name
-            if (str_contains($volid, $image)) {
-                return $volid;
+            $volLower = strtolower($volid);
+
+            // Count how many keywords match
+            $score = 0;
+            foreach ($keywords as $keyword) {
+                if (str_contains($volLower, $keyword)) {
+                    $score++;
+                }
             }
+
+            // All keywords must match, then pick the one with highest score
+            // (or shortest name as tiebreaker for specificity)
+            if ($score === count($keywords) && ($score > $bestScore || ($score === $bestScore && $bestMatch && strlen($volid) < strlen($bestMatch)))) {
+                $bestMatch = $volid;
+                $bestScore = $score;
+            }
+        }
+
+        if ($bestMatch) {
+            return $bestMatch;
         }
 
         $available = implode(', ', array_column($templates, 'volid'));
