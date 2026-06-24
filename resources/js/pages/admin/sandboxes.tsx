@@ -148,11 +148,13 @@ function SandboxDetailPanel({ sandbox }: { sandbox: Sandbox }) {
 function CreateSandboxDialog({
     open,
     onOpenChange,
-    on  ,
+    onCreated  ,
+    users
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onCreated: () => void;
+    users: any[];
 }) {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -208,15 +210,28 @@ function CreateSandboxDialog({
                     <DialogDescription>Provision a new sandbox environment for a user.</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="owner_user_id">Owner User ID</Label>
-                        <Input
+                    <div className="flex flex-col space-y-2">
+                        <Label htmlFor="owner_user_id">Owner Username</Label>
+                            <select 
+                                id="owner_user_id"
+                                value={form.owner_user_id}
+                                onChange={(e) => updateField('owner_user_id', e.target.value)}
+                                className="p-2 border bg-white text-black dark:bg-gray-800 dark:text-white" 
+                            >
+                                <option value="">Pilih User...</option>
+                                {users.map((user) => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.username}
+                                    </option>
+                                ))}
+                            </select>
+                        {/* <Input
                             id="owner_user_id"
                             placeholder="Enter user ID..."
                             value={form.owner_user_id}
                             onChange={(e) => updateField('owner_user_id', e.target.value)}
                             required
-                        />
+                        /> */}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -313,13 +328,13 @@ function CreateSandboxDialog({
     );
 }
 
-export default function Sandboxes() {
+export default function Sandboxes( { users }: { users: any[] } ) {
     const [sandboxes, setSandboxes] = useState<Sandbox[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState<string | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [activatingId, setActivatingId] = useState<string | null>(null);
-
+   
     const fetchSandboxes = useCallback(async () => {
         setLoading(true);
         try {
@@ -409,7 +424,7 @@ export default function Sandboxes() {
                                         <th className="px-4 py-3 text-left font-medium text-muted-foreground">Owner</th>
                                         <th className="px-4 py-3 text-left font-medium text-muted-foreground">Node</th>
                                         {/* <th className="px-4 py-3 text-left font-medium text-muted-foreground">Created At</th> */}
-                                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                                        <th colSpan={3} className="px-4 py-3 text-center font-medium text-muted-foreground">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-sidebar-border/50 dark:divide-sidebar-border/50">
@@ -459,7 +474,7 @@ export default function Sandboxes() {
                                                         year: 'numeric',
                                                     })}
                                                 </td> */}
-                                                <td className="px-4 py-3 text-right">
+                                                <td className="px-4 py-3 text-center">
                                                     {sandbox.status === 'queued' && (
                                                         <Button
                                                             size="sm"
@@ -477,6 +492,42 @@ export default function Sandboxes() {
                                                             Activate
                                                         </Button>
                                                     )}
+
+                                                    {sandbox.status === 'active' && (
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleStop(sandbox);
+                                                            }}
+                                                            disabled={activatingId === sandbox.id}
+                                                            className="h-7 text-xs"
+                                                        >
+                                                            {activatingId === sandbox.id ? (
+                                                                <Loader2 className="animate-spin" />
+                                                            ) : null}
+                                                            Stop
+                                                        </Button>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-3 text-center">
+                                                        {<Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDelete(sandbox);
+                                                            }}
+                                                            disabled={activatingId === sandbox.id}
+                                                            className="h-7 text-xs"
+                                                        >
+                                                            {activatingId === sandbox.id ? (
+                                                                <Loader2 className="animate-spin" />
+                                                            ) : null}
+                                                            Delete
+                                                        </Button>
+                                                    }
                                                 </td>
                                             </tr>
                                             {expandedId === sandbox.id && (
@@ -491,7 +542,7 @@ export default function Sandboxes() {
                 </div>
 
                 {/* Create Dialog */}
-                <CreateSandboxDialog open={dialogOpen} onOpenChange={setDialogOpen} onCreated={fetchSandboxes} />
+                <CreateSandboxDialog open={dialogOpen} onOpenChange={setDialogOpen} onCreated={fetchSandboxes} users ={users}/>
             </div>
         </AppLayout>
     );

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,7 +24,14 @@ Route::get('dashboard', function () {
 })->name('dashboard');
 
 Route::get('admin/sandboxes', function () {
-    return Inertia::render('admin/sandboxes');
+    $users = User::whereNot('role', 'admin')
+        ->select('id', 'username')
+        ->get();
+
+    return Inertia::render('admin/sandboxes', [
+        'users' => $users  
+    ]);
+
 })->name('admin.sandboxes');
 
 Route::get('admin/logs', function () {

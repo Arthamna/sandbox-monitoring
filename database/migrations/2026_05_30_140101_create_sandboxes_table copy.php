@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->text('status');
             $table->integer('vmid')->nullable();
             $table->text('ip_address')->nullable();
-            $table->jsonb('config')->default(DB::raw("'{}'::jsonb"));
+            $table->jsonb('config')->default(FacadesDB::raw("'{}'::jsonb"));
 
             $table->timestamp('started_at')->nullable();
             $table->timestamp('stopped_at')->nullable();
